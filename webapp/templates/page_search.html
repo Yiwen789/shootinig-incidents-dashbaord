@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
-  <meta charset="UTF-8">
-  <title>Case Searching Page by Ruofei Li and Yiwen Luo</title>
-  <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <title>Case Searching Page by Ruofei Li and Yiwen Luo</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='shooting.js') }}" ></script>
 
 </head>
 <body>
@@ -81,6 +82,12 @@
         <!--  -->
         <!-- data*/ -->
         
+        <p class="important">Nov 10: Click to get all cases where victims show signs of mental illnesses: <button id="get_mental_ill">Get Cases</button></p>
+
+        <p><table id="results_table"></table></p>
+
+        <!-- -->
+
         <h3 class="subtitle">Summary Cases</h3>
         <table>
         <tr><th>Area</th><th>Cases</th><th>Cases 2020</th></tr>
