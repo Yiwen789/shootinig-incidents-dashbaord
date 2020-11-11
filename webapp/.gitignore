@@ -9,5 +9,3 @@ data/victims_duprm.csv
 data/victims.csv
 data/locations_duprm.csv
 data/locations.csv
-__pycache__/
-config.py
