@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Case Searching Page by Ruofei Li and Yiwen Luo</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" type = 'txt/css' href="{{url('static', filename = 'style.css')}}">
 
 </head>
 <body>
@@ -97,12 +97,12 @@
         
         <div>
             <h3 class = "subtitle">Graph: Racial Makeup of Cases</h3>
-            <img class = 'pie' src = 'images/pie-chart.png'></img>
+            <img class = 'pie' src = '{{url('static', filename = 'pie-chart.png')}}'></img>
         </div>
          
         <div>
             <h3 class = "subtitle">Graph: Cases by Years</h3>
-            <img class = 'line' src = 'images/1-Line-Chart.png'></img>
+            <img class = 'line' src = '{{url('static', filename = '1-Line-Chart.png')}}'></img>
         </div>
 
     </body>

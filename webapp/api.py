@@ -66,7 +66,8 @@ def hello():
                  AND locations.state = states.id
                  AND victims.gender = gender.id
                  AND victims.race = race.id
-               ORDER BY incidents.date'''
+               ORDER BY incidents.date
+               LIMIT 20'''
 
 
     if filter_variables == '':
@@ -81,10 +82,12 @@ def hello():
                          AND incidents.id = victims.id
                          AND locations.state = states.id
                          AND victims.gender = gender.id
-                         AND victims.race = race.id'''
+                         AND victims.race = race.id
+                         '''
             col_name = filter_dict[request]
             query = query + '\nAND incidents.'+ col_name +' = 1' # Only look at mental_illness=true for now
-        query = query + '\nORDER BY incidents.date'
+        query = query + '\nORDER BY incidents.date LIMIT 20'
+
     cases_total = send_query(query)
     dic_list_to_return = []
     for case in cases_total:
