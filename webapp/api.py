@@ -19,13 +19,17 @@ from config import database
 #api = flask.Blueprint('api', __name__)
 api = flask.Flask(__name__)
 
+#==================Connection===============
 try:
     connection = psycopg2.connect(database=database, user=user, port='5433', password=password)
 except Exception as e:
     print("Error: problem with configuration", file=sys.stderr)
     exit()
 
+#================Reusable Functions================
+
 def send_query(query):
+#Send the query statement and get the cursor.
     try:
         cursor = connection.cursor()
         cursor.execute(query)
@@ -48,81 +52,86 @@ def dropdown_options(variable_name):
         list_to_show.append(option[0]) # Note that 'option' is a list with length 1.
     return json.dumps(list_to_show)
 
-@api.route('/cases/total')#[{filter = [mental_illness | threat_level | flee | death |arms]}]
-def hello():
-    '''
-    RESPONSE:
-    '''
-    filter_dict = {'mental_illness': 'signs_of_mental_illness', 'threat_level': 'threat_level', 'flee': 'flee',
-                  'camera': 'body_camera', 'death': 'manner_of_death', 'arms': 'arm_category'}
+def get_condition(variable_name):
+    # return the requested value of the variable
+    # Ex: For an endpoint ..../...?flee=foot&body_camera=true,
+    # when 'flee' is given as a parameter, this function will return 'foot'.
+    # When the value is 'none', return ''.
+    var_value = flask.request.args.get(variable_name)
+    if var_value == 'none':
+        return ''
+    return var_value
 
-    filter_variables = ''
-    request = flask.request.args.get('filter')
-    print(request)
-    if request != '':
-        filter_variables = filter_dict[request]
-    #, default = '', type = str
-
-#    query = f'SELECT states.state, states.state_full_name, locations.city, victims.full_name, victioms.age, victims.gender, victims.race, incidents.date, boolean_match.boolean AS mental_illness, threat_level.type, arm_category.type, flee.type, manner_of_death.type \
-#            FROM incidents, states, boolean_match, threat_level, arm_category, flee, manner_of_death \
-#            WHERE incidents.signs_of_mental_illness = boolean_match.id \
-#            AND locations.state = states.id \
-#            AND victims.gender = gender.id \
-#            AND incidents.threat_level = threat_level.id \
-#            AND incidents.threat_level = arm_category.id \
-#            AND incidents.flee = flee.id \
-#            AND incidents.manner_of_death = manner_of_death.id \
-#            ORDER BY states.state;'
-
-    query = '''SELECT states.state, states.state_full_name, incidents.date, victims.full_name, gender.type, race.type, victims.age
-               FROM incidents, locations, states, victims, gender, race
+def search_by_given_conditions():
+    # Variable names of searching conditions:
+    # ID, date, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
+    # While 'State' is not considered as a searching criteria in this method, it will be returned as a case detail together with the other info mentioned.
+    query = '''SELECT incidents.id, incidents.date, signs_of_mental_illness.type, threat_level.type, flee.type, body_camera.type, manner_of_death.type, arm_category.type, states.state
+               FROM incidents, signs_of_mental_illness, body_camera, threat_level, flee, manner_of_death, arm_category, states, locations
                WHERE incidents.id = locations.id
-                 AND incidents.id = victims.id
                  AND locations.state = states.id
-                 AND victims.gender = gender.id
-                 AND victims.race = race.id
-               ORDER BY incidents.date
-               LIMIT 20'''
+            '''
+    list_of_conditions = {'signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category'}
 
+    for var_name in list_of_conditions:
+        var_value = get_condition(var_name)
+#        print(var_value)
 
-    if filter_variables == '':
-        #if all dropdown menu default
-        pass
-    else:
-        #iterate through each selected criteria and add to the sql query
-        for key in filter_variables:
-            query = '''SELECT states.state, states.state_full_name, incidents.date, victims.full_name, gender.type, race.type, victims.age
-                       FROM incidents, locations, states, victims, gender, race
-                       WHERE incidents.id = locations.id
-                         AND incidents.id = victims.id
-                         AND locations.state = states.id
-                         AND victims.gender = gender.id
-                         AND victims.race = race.id
-                         '''
-            col_name = filter_dict[request]
-            query = query + '\nAND incidents.'+ col_name +' = 1' # Only look at mental_illness=true for now
-        query = query + '\nORDER BY incidents.date LIMIT 20'
+        query += '\nAND incidents.'+ var_name +' = ' + var_name + '.id'
+        # Turn the int value in TABLE incidents into its literal name.
 
-    cases_total = send_query(query)
+        if var_value != '': # If the filter value is specified
+            query += '\nAND '+ var_name + '.type = ' + "'" + var_value + "'"
+    query += '\nORDER BY incidents.date;'
+    cases_total = send_query(query) # type: cursor
+    return cases_total
+
+def search_by_given_state():
+    pass
+
+#=================================== Endpoint Implements=============================================
+
+@api.route('/cases/total') # EXAMPLE: ?signs_of_mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none
+# The order of variable names does not matter, but every one of them must appear exactly once. ('xxx=none' as the place holder)
+def cases_by_search():
+    '''
+    RESPONSE: Return a json dictionary list of cases which meet the specified criteria.
+    Each dictionary of cases contains the following fields: ID, date,
+    signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death,
+    arm_category, state_abbreviation.
+
+    Example: baseURL/cases/total?signs_of_mental_illness=true&flee=car&threat_level=none
+    &body_camera=none&manner_of_death=none&arm_category=none will show all the cases' info
+    in the fields above, filtered by signs_of_mental_illness=true and flee=car.
+    '''
+    cases_total = search_by_given_conditions() # type: cursor
+
     dic_list_to_return = []
+
     for case in cases_total:
         case_dict = {}
-        case_dict['state_abbreviation'] = case[0]
-        case_dict['state'] = case[1]
-        case_dict['date'] = case[2].isoformat()
-        case_dict['full_name'] = case[3]
-        case_dict['gender']  = case[4]
-        case_dict['race'] = case[5]
-        case_dict['age']  = case[6]
-        case_dict['signs_of_mental_illness'] = 'True'
-        #case_dict['threat_level'] =
-        #case_dict['armed'] =
-#        case_dict['arm_category'] =
-#        case_dict['flee'] =
-#        case_dict['manner_of_death'] =
-        #case_dict['body_camera'] =
+        case_dict['id'] = case[0]
+        case_dict['date'] = case[1].isoformat()
+        case_dict['signs_of_mental_illness'] = case[2]
+        case_dict['threat_level'] = case[3]
+        case_dict['flee'] = case[4]
+        case_dict['body_camera'] = case[5]
+        case_dict['manner_of_death'] = case[6]
+        case_dict['arm_category'] = case[7]
+        case_dict['state'] = case[8]
         dic_list_to_return.append(case_dict)
     return json.dumps(dic_list_to_return)
+
+
+@api.route('/cases/cumulative') # EXAMPLE: ?signs_of_mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none
+# The order of variable names does not matter, but every one of them must appear exactly once. ('xxx=none' as the place holder)
+def case_summaries_by_search():
+    cases_total = search_by_given_conditions() # type: cursor
+    case_count = 0
+    dic_to_return = {}
+
+    for case in cases_total:
+        case_count += 1
 
 @api.route('/options/<variable_name>')
 # This returns a json list of all possible values for a specified variable. Might not be useful.

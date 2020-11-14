@@ -41,7 +41,6 @@ function getIllButtonClicked() {
         // Build the table body.
         var tableBody = '';
         tableBody += '<tr><th>State Abbreviation</th>';
-        tableBody += '<th>State</th>';
         tableBody += '<th>Date</th>';
         tableBody += '<th>Full Name</th>';
         tableBody += '<th>Gender</th>';
@@ -50,7 +49,6 @@ function getIllButtonClicked() {
         tableBody += '<th>Signs of Mental Illness</th></tr>'
         for (var k = 0; k < casesList.length; k++) {
             tableBody += '</tr><td>'+casesList[k]['state_abbreviation'] + '</td>';
-            tableBody += '<td>'+casesList[k]['state'] + '</td>';
             tableBody += '<td>'+casesList[k]['date'] + '</td>';
             tableBody += '<td>'+casesList[k]['full_name'] + '</td>';
             tableBody += '<td>'+casesList[k]['gender'] + '</td>';
