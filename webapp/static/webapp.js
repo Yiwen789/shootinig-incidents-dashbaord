@@ -15,18 +15,78 @@
 window.onload = initialize;
 
 function initialize() {
-    var element = document.getElementById('get_mental_ill');
-    element.onclick = getIllButtonClicked;
+    var element = document.getElementById('get_cases_button');
+
+    element.onclick = getCasesButtonClicked;
+}
+
+String.prototype.format = function() {
+    var formatted = this;
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
+};
+
+function selectDropdown() {
+    var mental_illness_selected_value = document.getElementById('mental_illness_dropdown').value;
+    
+    mental_illness_selected_value.onclick = getCasesButtonClicked;
 }
 
 // Returns the base URL of the API, onto which endpoint components can be appended.
 function getAPIBaseURL() {
+    
     var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
     return baseURL;
 }
 
-function getIllButtonClicked() {
-    var url = getAPIBaseURL() + '/cases/total?filter=mental_illness';
+function getCasesButtonClicked() {
+    
+    var conditions = {
+        signs_of_mental_illness: document.getElementById('mental_illness_dropdown').value,
+        threat_level: document.getElementById('threat_level').value,
+        flee: document.getElementById('flee').value,
+        body_camera: document.getElementById('body_camera').value,
+        manner_of_death: document.getElementById('manner_of_death').value,
+        arm_category: document.getElementById('arm_category').value
+    }
+        
+//    
+//    var mental_illness = document.getElementById('mental_illness_dropdown').value;
+//    var threat_level = document.getElementById('threat_level').value;
+//    var flee = document.getElementById('flee').value;
+//    var body_camera = document.getElementById('body_camera').value;
+//    var manner_of_death = document.getElementById('manner_of_death').value;
+//    var arm_category = document.getElementById('arm_cateogory').value;
+    
+    var url = getAPIBaseURL() + '/cases/total';
+    
+//    var conditions = ['mental_illness', 'threat_level', 'flee', 'body_camera', 'manner_of_death', 'arm_category'];
+    for (condition in conditions){
+        if (conditions[condition] != 'None'){
+            url += '?';
+            break;
+        }
+    }
+    
+    for (condition in conditions){
+        if (String(conditions[condition]) == 'None'){
+            continue;
+        }
+        else{
+            url += `${String(condition)}=${conditions[condition].replace('%20', " ")}&`;
+        }
+    }
+    
+    var url = url.slice(0, -1);
+
+        
+
+//     var url = getAPIBaseURL() + '/cases/total?mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none';
+    
+//    var url = 
 
     // Send the request to the api
     fetch(url, {method: 'get'})
@@ -41,20 +101,32 @@ function getIllButtonClicked() {
         // Build the table body.
         var tableBody = '';
         tableBody += '<tr><th>State Abbreviation</th>';
+        tableBody += '<th>State</th>';
         tableBody += '<th>Date</th>';
         tableBody += '<th>Full Name</th>';
         tableBody += '<th>Gender</th>';
         tableBody += '<th>Race</th>';
         tableBody += '<th>Age</th>';
-        tableBody += '<th>Signs of Mental Illness</th></tr>'
+        tableBody += '<th>Signs of Mental Illness</th>';
+        tableBody += '<th>Threat Level</th>';
+        tableBody += '<th>Flee</th>';
+        tableBody += '<th>Body Camera</th>';
+        tableBody += '<th>Manner of Death</th>';
+        tableBody += '<th>Arm Category</th></tr>';
         for (var k = 0; k < casesList.length; k++) {
             tableBody += '</tr><td>'+casesList[k]['state_abbreviation'] + '</td>';
+            tableBody += '<td>'+casesList[k]['state'] + '</td>';
             tableBody += '<td>'+casesList[k]['date'] + '</td>';
             tableBody += '<td>'+casesList[k]['full_name'] + '</td>';
             tableBody += '<td>'+casesList[k]['gender'] + '</td>';
             tableBody += '<td>'+casesList[k]['race'] + '</td>';
             tableBody += '<td>'+casesList[k]['age'] + '</td>';
-            tableBody += '<td>'+casesList[k]['signs_of_mental_illness'] + '</td></tr>';
+            tableBody += '<td>'+casesList[k]['signs_of_mental_illness'] + '</td>';
+            tableBody += '<td>'+casesList[k]['threat_level'] + '</td>';
+            tableBody += '<td>'+casesList[k]['flee'] + '</td>';
+            tableBody += '<td>'+casesList[k]['body_camera'] + '</td>';
+            tableBody += '<td>'+casesList[k]['manner_of_death'] + '</td>';
+            tableBody += '<td>'+casesList[k]['arm_category'] + '</td></tr>';
         }
 
         // Put the table body we just built inside the table that's already on the page.

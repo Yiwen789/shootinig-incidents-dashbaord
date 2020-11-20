@@ -8,6 +8,7 @@
     as a template for setting up your web app assignment.
 '''
 import sys
+import argparse
 import flask
 import api
 
@@ -22,12 +23,15 @@ def home():
 # This route supports relative links among your web pages, assuming those pages
 # are stored in the templates/ directory or one of its descendant directories,
 # without requiring you to have specific routes for each page.
+@app.route('/<path:path>')
+def shared_header_catchall(path):
+    return flask.render_template(path)
+
 ########### Running the website server ###########
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print('Usage: {0} host port'.format(sys.argv[0]), file=sys.stderr)
-        exit()
+    parser = argparse.ArgumentParser('A tiny Flask application, including API')
+    parser.add_argument('host', help='the host on which this application is running')
+    parser.add_argument('port', type=int, help='the port on which this application is listening')
+    arguments = parser.parse_args()
+    app.run(host=arguments.host, port=arguments.port, debug=True)
 
-    host = sys.argv[1]
-    port = int(sys.argv[2])
-    app.run(host=host, port=port, debug=True)

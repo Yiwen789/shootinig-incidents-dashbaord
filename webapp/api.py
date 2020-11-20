@@ -16,14 +16,16 @@ from config import user
 from config import password
 from config import database
 
-#api = flask.Blueprint('api', __name__)
-api = flask.Flask(__name__)
+api = flask.Blueprint('api', __name__)
+#api = flask.Flask(__name__)
+
 
 #==================Connection===============
 try:
-    connection = psycopg2.connect(database=database, user=user, port='5433', password=password)
+    connection = psycopg2.connect(database=database, user=user, password=password)
 except Exception as e:
     print("Error: problem with configuration", file=sys.stderr)
+    print(e)
     exit()
 
 #================Reusable Functions================
@@ -58,31 +60,65 @@ def get_condition(variable_name):
     # when 'flee' is given as a parameter, this function will return 'foot'.
     # When the value is 'none', return ''.
     var_value = flask.request.args.get(variable_name)
-    if var_value == 'none':
+    if var_value == None:
         return ''
-    return var_value
+    else:
+    	return var_value
 
 def search_by_given_conditions():
     # Variable names of searching conditions:
     # ID, date, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
     # While 'State' is not considered as a searching criteria in this method, it will be returned as a case detail together with the other info mentioned.
-    query = '''SELECT incidents.id, incidents.date, signs_of_mental_illness.type, threat_level.type, flee.type, body_camera.type, manner_of_death.type, arm_category.type, states.state
-               FROM incidents, signs_of_mental_illness, body_camera, threat_level, flee, manner_of_death, arm_category, states, locations
-               WHERE incidents.id = locations.id
-                 AND locations.state = states.id
-            '''
-    list_of_conditions = {'signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category'}
+    
+#    query = '''SELECT incidents.id, incidents.date, signs_of_mental_illness.type, threat_level.type, flee.type, body_camera.type, manner_of_death.type, arm_category.type, states.state
+#               FROM incidents, signs_of_mental_illness, body_camera, threat_level, flee, manner_of_death, arm_category, states, locations
+#               WHERE incidents.id = locations.id
+#                 AND locations.state = states.id
+#            '''
 
-    for var_name in list_of_conditions:
-        var_value = get_condition(var_name)
-#        print(var_value)
+    query = '''
+            SELECT states.state, states.state_full_name, incidents.date, victims.full_name, gender.type AS gender, race.type AS race, victims.age, signs_of_mental_illness.type AS mental_illness, threat_level.type AS threat_level, flee.type AS flee, body_camera.type AS body_camera, manner_of_death.type AS manner_of_death, arm_category.type AS arm_category
+            FROM incidents, locations, states, victims, gender, race, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
+            WHERE incidents.id = locations.id
+            AND incidents.id = victims.id
+            AND locations.state = states.id
+            AND victims.gender = gender.id
+            AND victims.race = race.id
+            AND incidents.signs_of_mental_illness = signs_of_mental_illness.id
+            AND incidents.threat_level = threat_level.id
+            AND incidents.flee = flee.id
+            AND incidents.body_camera = body_camera.id
+            AND incidents.manner_of_death = manner_of_death.id
+            AND incidents.arm_category = arm_category.id
 
-        query += '\nAND incidents.'+ var_name +' = ' + var_name + '.id'
-        # Turn the int value in TABLE incidents into its literal name.
+    '''
+    
+#AND race.type = 'Asian'
+#AND signs_of_mental_illness.type = 'True'
+    
+    conditions = ['signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category']
+    
+    conditions_dict = {}
 
-        if var_value != '': # If the filter value is specified
-            query += '\nAND '+ var_name + '.type = ' + "'" + var_value + "'"
-    query += '\nORDER BY incidents.date;'
+    for variable_name in conditions:
+        conditions_dict[variable_name] = flask.request.args.get(variable_name)
+        
+    for variable_name, variable_value in conditions_dict.items():
+        if variable_value != None:
+            variable_value = str(variable_value)
+            query += f'\nAND {variable_name}.type = \'{variable_value}\''
+        else:
+            continue
+#
+#        query += '\nAND incidents.'+ var_name +' = ' + var_name + '.id'
+#        # Turn the int value in TABLE incidents into its literal name.
+#
+#        if var_value != '': # If the filter value is specified
+#        	print(var_value)
+#        	query += '\nAND '+ var_name + '.type = ' + "'" + var_value + "'"
+    #query += '\nORDER BY incidents.date;'
+    
+    query += '\nORDER BY incidents.date LIMIT 20'
     cases_total = send_query(query) # type: cursor
     return cases_total
 
@@ -110,16 +146,22 @@ def cases_by_search():
 
     for case in cases_total:
         case_dict = {}
-        case_dict['id'] = case[0]
-        case_dict['date'] = case[1].isoformat()
-        case_dict['signs_of_mental_illness'] = case[2]
-        case_dict['threat_level'] = case[3]
-        case_dict['flee'] = case[4]
-        case_dict['body_camera'] = case[5]
-        case_dict['manner_of_death'] = case[6]
-        case_dict['arm_category'] = case[7]
-        case_dict['state'] = case[8]
+        case_dict['state_abbreviation'] = case[0]
+        case_dict['state'] = case[1]
+        case_dict['date'] = case[2].isoformat()
+        case_dict['full_name'] = case[3]
+        case_dict['gender']  = case[4]
+        case_dict['race'] = case[5]
+        case_dict['age']  = case[6]
+        case_dict['signs_of_mental_illness'] = case[7]
+        case_dict['threat_level'] = case[8]
+        case_dict['flee'] = case[9]
+        case_dict['body_camera'] = case[10]
+        case_dict['manner_of_death'] = case[11]
+        case_dict['arm_category'] = case[12]
+
         dic_list_to_return.append(case_dict)
+        
     return json.dumps(dic_list_to_return)
 
 
@@ -150,12 +192,11 @@ def dropdown_options_for(variable_name):
     return dropdown_options(table_name)
 
 
-
-
-# TEST ------ Can run api.py directly.
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser('Covid19_API')
-    parser.add_argument('host', help='the host on which this application is running')
-    parser.add_argument('port', type=int, help='the port on which this application is listening')
-    arguments = parser.parse_args()
-    api.run(host=arguments.host, port=arguments.port, debug=True)
+#
+# 
+#if __name__ == '__main__':
+#    parser = argparse.ArgumentParser('Covid19_API')
+#    parser.add_argument('host', help='the host on which this application is running')
+#    parser.add_argument('port', type=int, help='the port on which this application is listening')
+#    arguments = parser.parse_args()
+#    api.run(host=arguments.host, port=arguments.port, debug=True)

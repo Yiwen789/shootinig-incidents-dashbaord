@@ -29,25 +29,8 @@
 
         <label>Signs of Mental Illness: </label>
 
-        <select class = 'dropdown'>
-              <option value="True">Yes</option>
-              <option value="False">No</option>
-        </select>
-        
-        <!-- ==================================== -->
-        
-        <label>Armed: </label>
-
-        <select class = 'dropdown'>
-              <option value="True">Yes</option>
-              <option value="False">No</option>
-        </select>
-        
-        <!-- ==================================== -->
-        
-        <label>Flee: </label>
-
-        <select class = 'dropdown'>
+        <select id="mental_illness_dropdown", class = 'dropdown'>
+              <option value='None'>Select</option>
               <option value="True">Yes</option>
               <option value="False">No</option>
         </select>
@@ -56,16 +39,31 @@
         
         <label>Threat Level: </label>
 
-        <select class = 'dropdown'>
-              <option value="True">Yes</option>
-              <option value="False">No</option>
+        <select id = 'threat_level', class = 'dropdown'>
+              <option value='None'>Select</option>
+              <option value="attack">Yes</option>
+              <option value="other">Other</option>
+              <option value="undetermined">Undetermined</option>
         </select>
         
         <!-- ==================================== -->
         
-        <label>Arms Category: </label>
+        <label>Flee: </label>
 
-        <select class = 'dropdown'>
+        <select id = 'flee', class = 'dropdown'>
+              <option value='None'>Select</option>
+              <option value='Not%20fleeing'>Not Fleeing</option>
+              <option value="Car">Car</option>
+              <option value="Foot">Foot</option>
+              <option value="Other">Other</option>
+        </select>
+        
+        <!-- ==================================== -->
+        
+        <label>Body Camera: </label>
+
+        <select id = 'body_camera', class = 'dropdown'>
+              <option value='None'>Select</option>
               <option value="True">Yes</option>
               <option value="False">No</option>
         </select>
@@ -74,15 +72,35 @@
         
         <label>Manner of Death: </label>
 
-        <select class = 'dropdown'>
-              <option value="True">Yes</option>
-              <option value="False">No</option>
+        <select id = 'manner_of_death', class = 'dropdown'>
+              <option value='None'>Select</option>
+              <option value="Shot">Shot</option>
+              <option value="Shot and Tasered">No</option>
+        </select>
+        
+        <!-- ==================================== -->
+        
+        <label>Arm Category: </label>
+
+        <select id = 'arm_category', class = 'dropdown'>
+            <option value='None'>Select</option>
+              <option value='Blunt Instruments'>Blunt Instruments</option>
+            <option value='Electrical Devices'>Electrical Devices</option>
+            <option value='Explosives'>Explosives</option>
+            <option value='Guns'>Guns</option>
+            <option value='Hand Tools'>Hand Tools</option>
+            <option value='Multiple'>Multiple</option>
+            <option value='Other Unusual Objects'>Other Unusual Objects</option>
+            <option value='Piercing Objects'>Piercing Objects</option>
+            <option value='Unarmed'>Unarmed</option>
+              <option value="Unknown">Unknown</option>
+              <option value="Vehicles">Vehicles</option>
         </select>
         
         <!--  -->
         <!-- data*/ -->
         
-        <p class="important">Nov 10: Click to get first 20 cases where cases satisfy the selected criteria: <button id="get_mental_ill">Get Cases</button></p>
+        <p class="important">Nov 10: Click to get first 20 cases where cases satisfy the selected criteria: <button id="get_cases_button">Get Cases</button></p>
 
         <p><table id="results_table"></table></p>
 
@@ -118,3 +136,4 @@
   
 </body>
 </html>
+
