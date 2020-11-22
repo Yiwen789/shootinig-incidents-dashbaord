@@ -159,12 +159,12 @@ def cases_total_by_condtion():
         else:
             continue
             
-    query += '\nORDER BY incidents.date LIMIT 20'
+    query += '\nORDER BY incidents.date'
     cases_total = send_query(query)
     
 #====================================================================
 
-    dic_list_to_return = []
+    list_of_dict = []
 
     for case in cases_total:
         case_dict = {}
@@ -187,8 +187,7 @@ def cases_total_by_condtion():
     return json.dumps(list_of_dict)
 
 
-@api.route('/cases/states/<state_abbreviation>/cumulative') # EXAMPLE: ?signs_of_mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none
-# The order of variable names does not matter, but every one of them must appear exactly once. ('xxx=none' as the place holder)
+@api.route('/cases/states/<state_abbreviation>/cumulative') 
 def cases_summary_by_state(state_abbreviation):
     '''
     RESPONSE:
@@ -199,9 +198,8 @@ def cases_summary_by_state(state_abbreviation):
             WHERE incidents.id = locations.id
             AND incidents.id = victims.id
             AND locations.state = states.id
-
     '''
-    query += f'\n AND states.state = \'{state_abbreviation}\' GROUP BY states.state, states.state_full_name ORDER BY states.state'
+    query += f'\n AND states.state = \'{state_abbreviation}\' GROUP BY states.state, states.state_full_name'
     
     cursor = send_query(query).fetchone()
 
@@ -213,23 +211,54 @@ def cases_summary_by_state(state_abbreviation):
     return json.dumps(case_dict)
     
     
+@api.route('/cases/states/<state_abbreviation>/annual')
+def cases_annual_summary_by_state(state_abbreviation):
+    '''
+    RESPONSE:
+    '''
+    query_total = '''
+            SELECT states.state, states.state_full_name, COUNT(incidents.id)
+            FROM incidents, locations, states, victims
+            WHERE incidents.id = locations.id
+            AND incidents.id = victims.id
+            AND locations.state = states.id
+    '''
+    query_total += f'\n AND states.state = \'{state_abbreviation}\' GROUP BY states.state, states.state_full_name'
+    
+    cursor = send_query(query_total).fetchone()
 
-@api.route('/options/<variable_name>')
-# This returns a json list of all possible values for a specified variable. Might not be useful.
-def dropdown_options_for(variable_name):
-    table_name = ''
-    print(table_name)
-    if variable_name == 'signs_of_mental_illness' or variable_name == 'body_camera':
-        # Variables sharing the boolean values table
-        table_name = 'boolean_match'
-    elif variable_name == 'flee' or variable_name == 'threat_level' or variable_name == 'manner_of_death' or variable_name == 'arm_category':
-        # Variables have own tables
-        table_name = variable_name
-        print(table_name)
-    else:
-        pass
-    return dropdown_options(table_name)
-
+    case_dict = {}
+    case_dict['state_abbreviation'] = cursor[0]
+    case_dict['state'] = cursor[1]
+    case_dict['total_cases'] = cursor[2]
+    
+    
+    query_annual = '''
+            SELECT COUNT(incidents.id), EXTRACT(YEAR FROM incidents.date)
+            FROM incidents, locations, states
+            WHERE incidents.id = locations.id
+            AND locations.state = states.id    
+    '''
+    
+    query_annual += f'\n AND states.state = \'{state_abbreviation}\' GROUP BY states.state, states.state_full_name, EXTRACT(YEAR FROM incidents.date) ORDER BY EXTRACT(YEAR FROM incidents.date)'
+    
+    cursor = send_query(query_annual)
+    
+    source_list = []
+    for year in cursor:
+        source_list.append(year[0])
+    
+    
+    
+    case_dict['2015'] = source_list[0]
+    case_dict['2016'] = source_list[1]
+    case_dict['2017'] = source_list[2]
+    case_dict['2018'] = source_list[3]
+    case_dict['2019'] = source_list[4]
+    case_dict['2020'] = source_list[5]
+    
+    return json.dumps(case_dict)
+    
 
 #
 # 

@@ -1,3 +1,24 @@
+/*
+=======================================
+title
+=======================================
+*/
+.banner{
+    height: 150px;
+    width: 102%;
+    color:#656A64;
+    background-color:#BCD3E7;
+    margin: -20px;
+}
+
+.navbar-banner{
+    height:50px;
+    width:102%;
+    color:#656A64;
+    background-color:#6B8EB7;
+    margin: -20px;
+}
+
 /* navigation bar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 ul.horizontal-navbar {
@@ -5,7 +26,7 @@ ul.horizontal-navbar {
     margin: 0px;
     padding: 13px;
     overflow: hidden;
-    background-color: #f1f1f1;
+/*    background-color: #f1f1f1;*/
     width: 500px;
     font: bold 20px Arial;
 }
@@ -27,12 +48,15 @@ ul.horizontal-navbar li a:hover {
     color: white;
 }
 
-/* title */
+/*
+=======================================
+title
+=======================================
+*/
+
 .title{
-	margin-bottom: 50px;
-	border-bottom: 3px solid #000;
-	font: bold 30px Arial, Helvetica, sans-serif;
-	padding-bottom:5px;
+	font: bold 72px Arial, Helvetica, sans-serif;
+	padding:30px;
 	width: 80%;
 }
 .subtitle{
@@ -41,6 +65,7 @@ ul.horizontal-navbar li a:hover {
 	padding-bottom: 3px;
 	width: 40%;
 }
+
 /* dropdown list
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 select.dropdown{
@@ -137,25 +162,63 @@ map
 }
 
 
+/*
+=======================================
+table
+=======================================
+*/
+
+#table-wrapper {
+  position:relative;
+}
+#table-scroll {
+  height:400px;
+  overflow:auto;  
+  margin-top:20px;
+}
+#table-wrapper table {
+  width:100%;
+
+}
+#table-wrapper table * {
+  background:yellow;
+  color:black;
+}
+#table-wrapper table thead th .text {
+  position:absolute;   
+  top:-20px;
+  z-index:2;
+  height:20px;
+  width:35%;
+  border:1px solid red;
+}
+
+
 /* Typography
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 h1, h2, h3, h4, h5, h6 {
-  margin-top: 1;
-  margin-bottom: 1;
+  margin-top: 0;
+  margin-bottom: 0;
+
   font-weight: 300; }
 
 p {
+/*
   margin-top: 1.5rem;
-  margin-left: 1.5rem;}
+  margin-left: 1.5rem;
+*/
+}
 
 body {
   background-color: rgb(242, 242, 242);
+/*
   display: block;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
   margin-top: 50px;
   margin-bottom: 50px;
   line-height: 1;
+*/
   font-weight: 400;
   font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: rgb(50, 50, 50);

@@ -11,13 +11,24 @@
 <!--<body>-->
 <!-- partial:index.partial.html -->
 
-<body>
-        <h1 class = "title">US Police Shootings Monitor</h1>
+    <body>  
+        <div class = 'banner'>
+            <h1 class = 'title'>US Police Shootings</h1>
+        </div>
+        
+        <div class = 'navbar-banner'>
+            <ul class = 'horizontal-navbar'>
+                <li><a href = '/'>Home</a></li>
+                <li><a href = 'page_search.html'>Search</a></li>
+                <li><a href = 'page_map.html'>Map</a></li>
+            </ul>
+        </div>
+        
+    
         <h3 class = 'text-container'>Introduction</h3>
       
         <!--  -->
         <!-- navigation bar*/ -->
-	    <label> Choose Mode: </label>
         <ul class = 'horizontal-navbar'>
         <li><a href = '/'>Home</a></li>
 	    <li><a href = 'page_search.html'>Search</a></li>
@@ -100,17 +111,16 @@
         <!--  -->
         <!-- data*/ -->
         
-        <p class="important">Nov 10: Click to get first 20 cases where cases satisfy the selected criteria: <button id="get_cases_button">Get Cases</button></p>
-
-        <table id="results_table"></table>
+        <button id="get_cases_button">Get Cases</button>
+        
+        <div id = 'table-wrapper'>
+            <div id = 'table-scroll'>
+                <table id="results_table"></table>
+            </div>
+        </div>
+        
 
         <!-- -->
-
-        <h3 class="subtitle">Summary Cases</h3>
-        <table>
-        <tr><th>Area</th><th>Cases</th><th>Cases 2020</th></tr>
-        <tr><td>USA</td><td>333</td><td>33</td></tr>
-        </table>
 
 <!--
         

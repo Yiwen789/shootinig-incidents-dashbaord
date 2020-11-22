@@ -12,7 +12,7 @@
     <!-- Here's stuff I wrote for my sample -->    
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='webapp.css') }}" />
-    <script type="text/javascript" src="{{url_for('static', filename='webapp.js') }}" ></script>
+    <script type="text/javascript" src="{{url_for('static', filename='webapp_map.js') }}" ></script>
 
 </head>
 
@@ -32,14 +32,18 @@
     
     
 <!--    <div id="state-summary"></div>-->
-
-    <div id="map-container"></div>
     
     <div id="state-summary"></div>
 
     <h3 class="subtitle">Summary Cases</h3>
     
     <table id = 'summary_table'></table>
+    
+    <h3 class="subtitle">United States Map</h3>
+
+    <div id="map-container"></div>
+    
+   
 
     
 </body>
