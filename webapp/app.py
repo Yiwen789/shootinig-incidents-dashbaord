@@ -18,14 +18,27 @@ app.register_blueprint(api.api, url_prefix='/api')
 # This route delivers the user your site's home page.
 @app.route('/')
 def home():
+    return flask.render_template('index.html')
+
+#@app.route('/')
+#def page_index():
+#    return flask.render_template('index.html')
+
+@app.route('/page_search.html')
+def page_search():
     return flask.render_template('page_search.html')
+    
+@app.route('/page_map.html')
+def page_map():
+    return flask.render_template('page_map.html')
+
 
 # This route supports relative links among your web pages, assuming those pages
 # are stored in the templates/ directory or one of its descendant directories,
 # without requiring you to have specific routes for each page.
-@app.route('/<path:path>')
-def shared_header_catchall(path):
-    return flask.render_template(path)
+#@app.route('/<path:path>')
+#def shared_header_catchall(path):
+#    return flask.render_template(path)
 
 ########### Running the website server ###########
 if __name__ == '__main__':

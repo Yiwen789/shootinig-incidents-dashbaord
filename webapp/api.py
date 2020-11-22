@@ -93,8 +93,57 @@ def search_by_given_conditions():
 
     '''
     
-#AND race.type = 'Asian'
-#AND signs_of_mental_illness.type = 'True'
+    conditions = ['signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category']
+    
+    conditions_dict = {}
+
+    for variable_name in conditions:
+        
+        conditions_dict[variable_name] = flask.request.args.get(variable_name)
+        
+    for variable_name, variable_value in conditions_dict.items():
+        if variable_value != None:
+            variable_value = str(variable_value)
+            query += f'\nAND {variable_name}.type = \'{variable_value}\''
+        else:
+            continue
+    
+    query += '\nORDER BY incidents.date LIMIT 20'
+    cases_total = send_query(query) # type: cursor
+    return cases_total
+
+
+#=================================== Endpoint Implements=============================================
+
+@api.route('/cases/total') # EXAMPLE: ?signs_of_mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none
+# The order of variable names does not matter, but every one of them must appear exactly once. ('xxx=none' as the place holder)
+def cases_total_by_condtion():
+    '''
+    RESPONSE: Return a json dictionary list of cases which meet the specified criteria.
+    Each dictionary of cases contains the following fields: ID, date,
+    signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death,
+    arm_category, state_abbreviation.
+
+    Example: baseURL/cases/total?signs_of_mental_illness=true&flee=car&threat_level=none
+    &body_camera=none&manner_of_death=none&arm_category=none will show all the cases' info
+    in the fields above, filtered by signs_of_mental_illness=true and flee=car.
+    '''
+    
+    query = '''
+            SELECT states.state, states.state_full_name, incidents.date, victims.full_name, gender.type AS gender, race.type AS race, victims.age, signs_of_mental_illness.type AS mental_illness, threat_level.type AS threat_level, flee.type AS flee, body_camera.type AS body_camera, manner_of_death.type AS manner_of_death, arm_category.type AS arm_category
+            FROM incidents, locations, states, victims, gender, race, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
+            WHERE incidents.id = locations.id
+            AND incidents.id = victims.id
+            AND locations.state = states.id
+            AND victims.gender = gender.id
+            AND victims.race = race.id
+            AND incidents.signs_of_mental_illness = signs_of_mental_illness.id
+            AND incidents.threat_level = threat_level.id
+            AND incidents.flee = flee.id
+            AND incidents.body_camera = body_camera.id
+            AND incidents.manner_of_death = manner_of_death.id
+            AND incidents.arm_category = arm_category.id
+    '''
     
     conditions = ['signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category']
     
@@ -109,38 +158,11 @@ def search_by_given_conditions():
             query += f'\nAND {variable_name}.type = \'{variable_value}\''
         else:
             continue
-#
-#        query += '\nAND incidents.'+ var_name +' = ' + var_name + '.id'
-#        # Turn the int value in TABLE incidents into its literal name.
-#
-#        if var_value != '': # If the filter value is specified
-#        	print(var_value)
-#        	query += '\nAND '+ var_name + '.type = ' + "'" + var_value + "'"
-    #query += '\nORDER BY incidents.date;'
-    
+            
     query += '\nORDER BY incidents.date LIMIT 20'
-    cases_total = send_query(query) # type: cursor
-    return cases_total
-
-def search_by_given_state():
-    pass
-
-#=================================== Endpoint Implements=============================================
-
-@api.route('/cases/total') # EXAMPLE: ?signs_of_mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none
-# The order of variable names does not matter, but every one of them must appear exactly once. ('xxx=none' as the place holder)
-def cases_by_search():
-    '''
-    RESPONSE: Return a json dictionary list of cases which meet the specified criteria.
-    Each dictionary of cases contains the following fields: ID, date,
-    signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death,
-    arm_category, state_abbreviation.
-
-    Example: baseURL/cases/total?signs_of_mental_illness=true&flee=car&threat_level=none
-    &body_camera=none&manner_of_death=none&arm_category=none will show all the cases' info
-    in the fields above, filtered by signs_of_mental_illness=true and flee=car.
-    '''
-    cases_total = search_by_given_conditions() # type: cursor
+    cases_total = send_query(query)
+    
+#====================================================================
 
     dic_list_to_return = []
 
@@ -160,20 +182,37 @@ def cases_by_search():
         case_dict['manner_of_death'] = case[11]
         case_dict['arm_category'] = case[12]
 
-        dic_list_to_return.append(case_dict)
+        list_of_dict.append(case_dict)
         
-    return json.dumps(dic_list_to_return)
+    return json.dumps(list_of_dict)
 
 
-@api.route('/cases/cumulative') # EXAMPLE: ?signs_of_mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none
+@api.route('/cases/states/<state_abbreviation>/cumulative') # EXAMPLE: ?signs_of_mental_illness=True&flee=Car&arm_category=none&body_camera=True&threat_level=none&manner_of_death=none
 # The order of variable names does not matter, but every one of them must appear exactly once. ('xxx=none' as the place holder)
-def case_summaries_by_search():
-    cases_total = search_by_given_conditions() # type: cursor
-    case_count = 0
-    dic_to_return = {}
+def cases_summary_by_state(state_abbreviation):
+    '''
+    RESPONSE:
+    '''
+    query = '''
+            SELECT states.state, states.state_full_name, COUNT(incidents.id)
+            FROM incidents, locations, states, victims
+            WHERE incidents.id = locations.id
+            AND incidents.id = victims.id
+            AND locations.state = states.id
 
-    for case in cases_total:
-        case_count += 1
+    '''
+    query += f'\n AND states.state = \'{state_abbreviation}\' GROUP BY states.state, states.state_full_name ORDER BY states.state'
+    
+    cursor = send_query(query).fetchone()
+
+    case_dict = {}
+    case_dict['state_abbreviation'] = cursor[0]
+    case_dict['state'] = cursor[1]
+    case_dict['total_cases'] = cursor[2]
+        
+    return json.dumps(case_dict)
+    
+    
 
 @api.route('/options/<variable_name>')
 # This returns a json list of all possible values for a specified variable. Might not be useful.

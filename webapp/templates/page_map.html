@@ -1,47 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Map Navigating Page by Yiwen Luo and Ruofei Li</title>
-  <link rel="stylesheet" href="./style.css">
+    <title>Case Searching Page</title>
+    <!-- These are required for the DataMaps library to work -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+
+    <!-- You need this one for the US map -->
+    <script src="{{url_for('static', filename = 'datamaps.usa.min.js')}}"></script>
+
+    <!-- Here's stuff I wrote for my sample -->    
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='webapp.css') }}" />
+    <script type="text/javascript" src="{{url_for('static', filename='webapp.js') }}" ></script>
 
 </head>
+
 <body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
-<html>
+	<h1 class = "title">US Police Shootings Monitor</h1>
+    <h3 class = 'text-container'>Introduction</h3>
 
-    <body>
-        <h1 class = "title">US Police Shootings Monitor</h1>
+    <!--  -->
+    <!-- navigation bar*/ -->
+    <label> Choose Mode: </label>
+    <ul class = 'horizontal-navbar'>
+    <li><a href = '/'>Home</a></li>
+    <li><a href = 'page_search.html'>Search</a></li>
+    <li><a href = 'page_map.html'>Map</a></li>
+    </ul>
+    
+    
+    
+<!--    <div id="state-summary"></div>-->
 
-       <h3 class = 'text-container'>Introduction</h3>      
-        <!--  -->
-	<!-- navigation bar*/ -->
-	<p>Choose Mode:</p>
-        <ul class = 'horizontal-navbar'>
-            <li><a href = 'page_search.html'>Search</a></li>
-            <li><a>Map</a></li>
-        </ul>
+    <div id="map-container"></div>
+    
+    <div id="state-summary"></div>
 
-	<label> State: XX </label>
-        <table>
-	<tr><th>Summary 1</th><th>Summary 2</th><th>Summary 3</th><th>...</th></tr>
-	<tr><th>...</th><th>...</th><th>...</th><th>...</th></tr>
-	</table>
-       
-	<div>
-		<h3 class='subtitle'> Click on the map: </h3>
-		<img clas = 'map' src = 'images/usmap.png'>
-	</div>
+    <h3 class="subtitle">Summary Cases</h3>
+    
+    <table id = 'summary_table'></table>
 
-	<table>
-	<tr><th>Date</th><th>City</th><th>...</th></tr>
-	<tr><th>...</th><th>...</th><th>...</th></tr>
-	</table>
-
-    </body>
-</html>
-<!-- partial -->
-  
+    
 </body>
+    
 </html>

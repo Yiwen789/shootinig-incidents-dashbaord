@@ -2,26 +2,26 @@
 <html lang="en" >
 <head>
     <meta charset="UTF-8">
-    <title>Case Searching Page by Ruofei Li and Yiwen Luo</title>
+    <title>Case Searching Page</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='webapp.css') }}" />
     <script type="text/javascript" src="{{url_for('static', filename='webapp.js') }}" ></script>
 
 </head>
-<body>
+    
+<!--<body>-->
 <!-- partial:index.partial.html -->
-<!DOCTYPE html>
-<html>
 
-    <body>
+<body>
         <h1 class = "title">US Police Shootings Monitor</h1>
         <h3 class = 'text-container'>Introduction</h3>
       
         <!--  -->
         <!-- navigation bar*/ -->
-	<label> Choose Mode: </label>
+	    <label> Choose Mode: </label>
         <ul class = 'horizontal-navbar'>
-	    <li><a>Search</a></li>
-            <li><a href = 'page_map.html'>Map</a></li>
+        <li><a href = '/'>Home</a></li>
+	    <li><a href = 'page_search.html'>Search</a></li>
+        <li><a href = 'page_map.html'>Map</a></li>
         </ul>
         
         <!--  -->
@@ -29,7 +29,7 @@
 
         <label>Signs of Mental Illness: </label>
 
-        <select id="mental_illness_dropdown", class = 'dropdown'>
+        <select id="mental_illness_dropdown" class = 'dropdown'>
               <option value='None'>Select</option>
               <option value="True">Yes</option>
               <option value="False">No</option>
@@ -39,7 +39,7 @@
         
         <label>Threat Level: </label>
 
-        <select id = 'threat_level', class = 'dropdown'>
+        <select id = 'threat_level' class = 'dropdown'>
               <option value='None'>Select</option>
               <option value="attack">Yes</option>
               <option value="other">Other</option>
@@ -50,9 +50,9 @@
         
         <label>Flee: </label>
 
-        <select id = 'flee', class = 'dropdown'>
+        <select id = 'flee' class = 'dropdown'>
               <option value='None'>Select</option>
-              <option value='Not%20fleeing'>Not Fleeing</option>
+              <option value='Not fleeing'>Not Fleeing</option>
               <option value="Car">Car</option>
               <option value="Foot">Foot</option>
               <option value="Other">Other</option>
@@ -62,7 +62,7 @@
         
         <label>Body Camera: </label>
 
-        <select id = 'body_camera', class = 'dropdown'>
+        <select id = 'body_camera' class = 'dropdown'>
               <option value='None'>Select</option>
               <option value="True">Yes</option>
               <option value="False">No</option>
@@ -72,7 +72,7 @@
         
         <label>Manner of Death: </label>
 
-        <select id = 'manner_of_death', class = 'dropdown'>
+        <select id = 'manner_of_death' class = 'dropdown'>
               <option value='None'>Select</option>
               <option value="Shot">Shot</option>
               <option value="Shot and Tasered">No</option>
@@ -82,9 +82,9 @@
         
         <label>Arm Category: </label>
 
-        <select id = 'arm_category', class = 'dropdown'>
+        <select id = 'arm_category' class = 'dropdown'>
             <option value='None'>Select</option>
-              <option value='Blunt Instruments'>Blunt Instruments</option>
+            <option value='Blunt Instruments'>Blunt Instruments</option>
             <option value='Electrical Devices'>Electrical Devices</option>
             <option value='Explosives'>Explosives</option>
             <option value='Guns'>Guns</option>
@@ -102,7 +102,7 @@
         
         <p class="important">Nov 10: Click to get first 20 cases where cases satisfy the selected criteria: <button id="get_cases_button">Get Cases</button></p>
 
-        <p><table id="results_table"></table></p>
+        <table id="results_table"></table>
 
         <!-- -->
 
@@ -112,6 +112,7 @@
         <tr><td>USA</td><td>333</td><td>33</td></tr>
         </table>
 
+<!--
         
         <h3 class="subtitle">Cases</h3>
         <table>
@@ -120,20 +121,18 @@
         <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
         </table>
         
+-->
         <div>
             <h3 class = "subtitle">Graph: Racial Makeup of Cases</h3>
-            <img class = 'pie' src = '{{url_for('static', filename='pie-chart.png') }}'></img>
+            <img class = 'pie' src = '{{url_for('static', filename='pie-chart.png')}}'></img>
         </div>
          
         <div>
             <h3 class = "subtitle">Graph: Cases by Years</h3>
-            <img class = 'line' src = '{{url_for('static', filename='1-Line-Chart.png') }}'></img>
+            <img class = 'line' src = '{{url_for('static', filename='1-Line-Chart.png')}}'></img>
         </div>
 
-    </body>
-</html>
-<!-- partial -->
-  
 </body>
+ 
 </html>
 
