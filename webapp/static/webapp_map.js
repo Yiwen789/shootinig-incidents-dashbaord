@@ -38,7 +38,7 @@ function initializeMap() {
                             scope: 'usa', // which map?
                             projection: 'equirectangular', // what map projection? 'mercator' is also an option
                             done: onMapDone, // once the map is loaded, call this function
-                            data: extraStateInfo, // here's some data that will be used by the popup template
+//                            data: extraStateInfo, // here's some data that will be used by the popup template
                             fills: { defaultFill: '#999999' },
                             geographyConfig: {
                                 //popupOnHover: false, // You can disable the hover popup

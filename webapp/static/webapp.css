@@ -4,35 +4,90 @@ title
 =======================================
 */
 .banner{
-    height: 150px;
-    width: 102%;
+    height: 125px;
+    width: 100%;
+    position: relative;
     color:#656A64;
     background-color:#BCD3E7;
-    margin: -20px;
+    margin: 0;
 }
 
+.banner-home{
+    height: 300px;
+}
 .navbar-banner{
     height:50px;
-    width:102%;
+    width:100%;
+    position: relative;
     color:#656A64;
     background-color:#6B8EB7;
-    margin: -20px;
+    margin: 0;
+}
+
+/* navigation bar index page
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.horizontal-navbar-index-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    align-content: center;
+}
+
+
+
+ul.horizontal-navbar-index {
+    list-style-type: none;
+    margin-top: 0px;
+    position:relative;
+    overflow: hidden;
+    background-color: #6B8EB7;
+    padding: 0px;
+    width: 100%;
+    font: bold 40px Arial;
+    height: 500px;
+    background-image: url('background_1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+
+ul.horizontal-navbar-index li {
+    float: left;
+    width: 50%;
+}
+
+ul.horizontal-navbar-index li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 250px 250px;
+    text-decoration: none;
+}
+
+ul.horizontal-navbar-index li a:hover {
+    background-color: #555;
+    color: white;
 }
 
 /* navigation bar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 ul.horizontal-navbar {
     list-style-type: none;
-    margin: 0px;
-    padding: 13px;
+    margin-top: 0px;
+    margin-bottom:50px;
+    position:relative;
     overflow: hidden;
-/*    background-color: #f1f1f1;*/
-    width: 500px;
+    background-color: #6B8EB7;
+    padding: 5px;
+    width: 99.5%;
     font: bold 20px Arial;
 }
 
 ul.horizontal-navbar li {
     float: left;
+    width: 33%;
 }
 
 ul.horizontal-navbar li a {
@@ -59,19 +114,29 @@ title
 	padding:30px;
 	width: 80%;
 }
+.title-home{
+    font: bold 100px Arial, Helvetica, sans-serif;
+	padding:30px;
+	width: 80%;: 
+}
 .subtitle{
-	margin-bottom: 30px;
-	border-bottom: 2px solid #000;
-	padding-bottom: 3px;
-	width: 40%;
+    font: bold 30px Arial, Helvetica, sans-serif;
+	margin: 15px;
+    position: relative;
+    color:#656A64;
+	width: 100%;
 }
 
 /* dropdown list
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-select.dropdown{
-    width: 8%;
+.dropdown{
+    width:100%;
 }
-
+.select{
+    width: 100%;
+    grid-template-areas: "select";
+    align-items: center;
+}
 
 /* graphs
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -99,11 +164,9 @@ select.dropdown{
 }
 
 .text-container{
-  padding: 0.5rem 0.5rem;
+  padding: 10px;
   height: 5rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-top: 1.5rem;
+  margin: 20px;
   display: block;
   position: relative;
    box-shadow: rgb(200, 200, 200) 0px 1px 1px;
@@ -121,7 +184,17 @@ select.dropdown{
 map
 =======================================
 */
+.page-map-flex-container{
+    display: flex;
+    flex-direction: r;
+    width:100%
+}
 
+.page-map-flex-container > div{
+    margin: 10px;
+  padding: 10px;
+    width: 50%;
+}
 
 #map-container {
     position: relative;
@@ -134,7 +207,7 @@ map
      * https://css-tricks.com/aspect-ratio-boxes/
      */
     height: 0;
-    width: 80%;
+    width: 100%;
     padding-bottom: 60%;
 
     /* My friend Shaun (Carleton CS '02) is even worse than I am at the details of
@@ -142,7 +215,7 @@ map
      * his color choices, he makes stuff orange to force their hand. I am using
      * orange here both to remind you to change the color, and to make visible the
      * size and aspect ratio of the US map object. */
-    background: orange;
+    background: #dddddd;
 }
 
 #goals {
@@ -178,10 +251,10 @@ table
 }
 #table-wrapper table {
   width:100%;
+  background-color: #dddddd;
 
 }
 #table-wrapper table * {
-  background:yellow;
   color:black;
 }
 #table-wrapper table thead th .text {
@@ -203,14 +276,19 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 300; }
 
 p {
-/*
-  margin-top: 1.5rem;
-  margin-left: 1.5rem;
-*/
+  margin: 1px;
+}
+
+header{
+    margin: -40px;
+    padding: 0px;
+    overflow: auto;
 }
 
 body {
   background-color: rgb(242, 242, 242);
+    margin: 20px;
+    padding: 20px;
 /*
   display: block;
   margin-left: 1.5rem;
@@ -227,4 +305,58 @@ body {
 .important {
   color: red;
   font-size: 110%;
+}
+
+/*
+=======================================
+flex box
+=======================================
+*/
+
+.dropdown-container {
+  display: flex;
+  flex-direction: r;
+}
+.dropdown-container > div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 5px;
+  font-size: 20px;
+  width: 33%;
+}
+
+.my-spacer {
+    flex: 1 1 auto;
+}
+
+/*
+=======================================
+button
+=======================================
+*/
+
+.button{
+    background-color: darkgray;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+/*
+    position:absolute;
+    right: 50px;
+*/
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: flex-end;
 }

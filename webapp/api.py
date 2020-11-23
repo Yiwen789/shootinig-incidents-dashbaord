@@ -260,6 +260,59 @@ def cases_annual_summary_by_state(state_abbreviation):
     return json.dumps(case_dict)
     
 
+@api.route('/cases/total/demographics/race')
+def cases_by_race_by_condition():
+    query = '''
+            SELECT COUNT(incidents), race.type
+            FROM incidents, locations, states, victims, gender, race, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
+            WHERE incidents.id = locations.id
+            AND incidents.id = victims.id
+            AND locations.state = states.id
+            AND victims.gender = gender.id
+            AND victims.race = race.id
+            AND incidents.signs_of_mental_illness = signs_of_mental_illness.id
+            AND incidents.threat_level = threat_level.id
+            AND incidents.flee = flee.id
+            AND incidents.body_camera = body_camera.id
+            AND incidents.manner_of_death = manner_of_death.id
+            AND incidents.arm_category = arm_category.id
+    '''
+    
+    conditions = ['signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category']
+    
+    conditions_dict = {}
+
+    for variable_name in conditions:
+        conditions_dict[variable_name] = flask.request.args.get(variable_name)
+        
+    for variable_name, variable_value in conditions_dict.items():
+        if variable_value != None:
+            variable_value = str(variable_value)
+            query += f'\nAND {variable_name}.type = \'{variable_value}\''
+        else:
+            continue
+            
+    query += '\nGROUP BY race.type'
+    cursor = send_query(query)
+    
+#====================================================================
+
+    data = []
+    labels = []
+    
+    for row in cursor:
+        data.append(row[0])
+        labels.append(row[1])
+    
+    dict = {}
+    dict['data'] = data
+    dict['labels'] = labels
+            
+    return json.dumps(dict)
+    
+    
+
+
 #
 # 
 #if __name__ == '__main__':

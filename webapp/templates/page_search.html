@@ -5,113 +5,146 @@
     <title>Case Searching Page</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='webapp.css') }}" />
     <script type="text/javascript" src="{{url_for('static', filename='webapp.js') }}" ></script>
+<!--    <script type="text/javascript" src="{{url_for('static', filename='webapp_charts.js') }}" ></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 </head>
     
 <!--<body>-->
 <!-- partial:index.partial.html -->
+    
+<body>  
 
-    <body>  
-        <div class = 'banner'>
-            <h1 class = 'title'>US Police Shootings</h1>
-        </div>
+        <header>
+            <div class = 'banner'>
+                <h1 class = 'title'>US Police Shootings</h1>
+            </div>
+
+
+            <!--  -->
+            <!-- navigation bar*/ -->
+
+            <div>
+                <ul class = 'horizontal-navbar'>
+                    <li><a href = '/'>Home</a></li>
+                    <li><a href = 'page_search.html'>Search</a></li>
+                    <li><a href = 'page_map.html'>Map</a></li>
+                </ul>
+            </div>
+
+        </header>
         
-        <div class = 'navbar-banner'>
-            <ul class = 'horizontal-navbar'>
-                <li><a href = '/'>Home</a></li>
-                <li><a href = 'page_search.html'>Search</a></li>
-                <li><a href = 'page_map.html'>Map</a></li>
-            </ul>
-        </div>
         
     
-        <h3 class = 'text-container'>Introduction</h3>
-      
-        <!--  -->
-        <!-- navigation bar*/ -->
-        <ul class = 'horizontal-navbar'>
-        <li><a href = '/'>Home</a></li>
-	    <li><a href = 'page_search.html'>Search</a></li>
-        <li><a href = 'page_map.html'>Map</a></li>
-        </ul>
+<!--        <h3 class = 'text-container'>Introduction</h3>-->
+   
+        <div>
+            <h3 class="subtitle">Selections</h3>
+        </div>
         
         <!--  -->
         <!-- dropdown menus -->
-
-        <label>Signs of Mental Illness: </label>
-
-        <select id="mental_illness_dropdown" class = 'dropdown'>
-              <option value='None'>Select</option>
-              <option value="True">Yes</option>
-              <option value="False">No</option>
-        </select>
+        
+        <div class = 'dropdown-container'>
+            <div>
+                <label>Signs of Mental Illness: </label>
+                <div class = 'dropdown'>
+                    <select id="mental_illness_dropdown" class = 'select'>
+                          <option value='None'>Select</option>
+                          <option value="True">Yes</option>
+                          <option value="False">No</option>
+                    </select>
+                </div>   
+            </div>
+                
+            <div>
+                <label>Threat Level: </label>
+                <div class = 'dropdown'>
+                    <select id = 'threat_level' class = 'select'>
+                          <option value='None'>Select</option>
+                          <option value="attack">Yes</option>
+                          <option value="other">Other</option>
+                          <option value="undetermined">Undetermined</option>
+                    </select>
+                </div>  
+            </div>
+            
+            <div>
+                <label>Flee: </label>
+                <div class = 'dropdown'>
+                    <select id = 'flee' class = 'select'>
+                          <option value='None'>Select</option>
+                          <option value='Not fleeing'>Not Fleeing</option>
+                          <option value="Car">Car</option>
+                          <option value="Foot">Foot</option>
+                          <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>  
+        </div>
         
         <!-- ==================================== -->
         
-        <label>Threat Level: </label>
-
-        <select id = 'threat_level' class = 'dropdown'>
-              <option value='None'>Select</option>
-              <option value="attack">Yes</option>
-              <option value="other">Other</option>
-              <option value="undetermined">Undetermined</option>
-        </select>
         
-        <!-- ==================================== -->
+        <div class = 'dropdown-container'>
+            <div>
+                <label>Body Camera: </label>
+                <div>
+                    <select id = 'body_camera' class = 'select'>
+                          <option value='None'>Select</option>
+                          <option value="True">Yes</option>
+                          <option value="False">No</option>
+                    </select>
+                </div>
+            </div>
+            
+            
+            <div>
+                <label>Manner of Death: </label>
+                <div>
+                    <select id = 'manner_of_death' class = 'select'>
+                          <option value='None'>Select</option>
+                          <option value="Shot">Shot</option>
+                          <option value="Shot and Tasered">No</option>
+                    </select> 
+                </div>
+            </div>
+            
+            
+            <div>
+                <label>Arm Category: </label>
+                <div>
+                    <select id = 'arm_category' class = 'select'>
+                        <option value='None'>Select</option>
+                        <option value='Blunt Instruments'>Blunt Instruments</option>
+                        <option value='Electrical Devices'>Electrical Devices</option>
+                        <option value='Explosives'>Explosives</option>
+                        <option value='Guns'>Guns</option>
+                        <option value='Hand Tools'>Hand Tools</option>
+                        <option value='Multiple'>Multiple</option>
+                        <option value='Other Unusual Objects'>Other Unusual Objects</option>
+                        <option value='Piercing Objects'>Piercing Objects</option>
+                        <option value='Unarmed'>Unarmed</option>
+                          <option value="Unknown">Unknown</option>
+                          <option value="Vehicles">Vehicles</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         
-        <label>Flee: </label>
-
-        <select id = 'flee' class = 'dropdown'>
-              <option value='None'>Select</option>
-              <option value='Not fleeing'>Not Fleeing</option>
-              <option value="Car">Car</option>
-              <option value="Foot">Foot</option>
-              <option value="Other">Other</option>
-        </select>
         
-        <!-- ==================================== -->
         
-        <label>Body Camera: </label>
-
-        <select id = 'body_camera' class = 'dropdown'>
-              <option value='None'>Select</option>
-              <option value="True">Yes</option>
-              <option value="False">No</option>
-        </select>
+        <div class = 'button-container'>
+            <div>
+                <button id="get_cases_button" class = 'button'>Get Cases</button>
+            </div>
+<!--            <span class="my-spacer"></span>-->      
+        </div>
         
-        <!-- ==================================== -->
-        
-        <label>Manner of Death: </label>
-
-        <select id = 'manner_of_death' class = 'dropdown'>
-              <option value='None'>Select</option>
-              <option value="Shot">Shot</option>
-              <option value="Shot and Tasered">No</option>
-        </select>
-        
-        <!-- ==================================== -->
-        
-        <label>Arm Category: </label>
-
-        <select id = 'arm_category' class = 'dropdown'>
-            <option value='None'>Select</option>
-            <option value='Blunt Instruments'>Blunt Instruments</option>
-            <option value='Electrical Devices'>Electrical Devices</option>
-            <option value='Explosives'>Explosives</option>
-            <option value='Guns'>Guns</option>
-            <option value='Hand Tools'>Hand Tools</option>
-            <option value='Multiple'>Multiple</option>
-            <option value='Other Unusual Objects'>Other Unusual Objects</option>
-            <option value='Piercing Objects'>Piercing Objects</option>
-            <option value='Unarmed'>Unarmed</option>
-              <option value="Unknown">Unknown</option>
-              <option value="Vehicles">Vehicles</option>
-        </select>
-        
-        <!--  -->
-        <!-- data*/ -->
-        
-        <button id="get_cases_button">Get Cases</button>
+    
+        <div>
+            <h3 class="subtitle">Cases</h3>
+        </div>
         
         <div id = 'table-wrapper'>
             <div id = 'table-scroll'>
@@ -119,28 +152,15 @@
             </div>
         </div>
         
-
-        <!-- -->
-
-<!--
         
-        <h3 class="subtitle">Cases</h3>
-        <table>
-        <tr><th>State</th><th>City</th><th>Date</th><th>...</th></tr>
-        <tr><td>MN</td><td>St. Paul</td><td>YYYY-MM-DD</td><td>...</td></tr>
-        <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
-        </table>
-        
--->
         <div>
             <h3 class = "subtitle">Graph: Racial Makeup of Cases</h3>
-            <img class = 'pie' src = '{{url_for('static', filename='pie-chart.png')}}'></img>
+            
+            <div class="container">
+                <canvas id="racial-pie-chart"></canvas>
+            </div>
         </div>
-         
-        <div>
-            <h3 class = "subtitle">Graph: Cases by Years</h3>
-            <img class = 'line' src = '{{url_for('static', filename='1-Line-Chart.png')}}'></img>
-        </div>
+
 
 </body>
  

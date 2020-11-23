@@ -17,31 +17,47 @@
 </head>
 
 <body>
-	<h1 class = "title">US Police Shootings Monitor</h1>
-    <h3 class = 'text-container'>Introduction</h3>
+	<header>
+        <div class = 'banner'>
+            <h1 class = 'title'>US Police Shootings</h1>
+        </div>
 
-    <!--  -->
-    <!-- navigation bar*/ -->
-    <label> Choose Mode: </label>
-    <ul class = 'horizontal-navbar'>
-    <li><a href = '/'>Home</a></li>
-    <li><a href = 'page_search.html'>Search</a></li>
-    <li><a href = 'page_map.html'>Map</a></li>
-    </ul>
-    
-    
-    
-<!--    <div id="state-summary"></div>-->
-    
-    <div id="state-summary"></div>
 
-    <h3 class="subtitle">Summary Cases</h3>
-    
-    <table id = 'summary_table'></table>
-    
-    <h3 class="subtitle">United States Map</h3>
+        <!--  -->
+        <!-- navigation bar*/ -->
 
-    <div id="map-container"></div>
+        <div>
+            <ul class = 'horizontal-navbar'>
+                <li><a href = '/'>Home</a></li>
+                <li><a href = 'page_search.html'>Search</a></li>
+                <li><a href = 'page_map.html'>Map</a></li>
+            </ul>
+        </div>
+
+    </header>
+
+    <div class = 'page-map-flex-container'>
+        <div>
+            <h3 class="subtitle">Summary Cases</h3>
+            <div id = 'table-wrapper'>
+                <table id = 'summary_table'></table>
+            </div>
+            
+        </div>
+        
+        <div>
+            <h3 class="subtitle">United States Map</h3>
+            <div id="map-container"></div>
+        </div>
+            
+        
+        
+    </div>
+    
+
+    
+    
+    
     
    
 
