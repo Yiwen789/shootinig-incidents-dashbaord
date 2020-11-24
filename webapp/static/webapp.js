@@ -16,20 +16,16 @@ function initialize() {
     
 }
 
-
-//function selectDropdown() {
-//    var mental_illness_selected_value = document.getElementById('mental_illness_dropdown').value;
-//    mental_illness_selected_value.onclick = getCasesButtonClicked;
-//}
-
-
+// Returns the base URL of the API, onto which endpoint components can be appended.
 function getAPIBaseURL() {
     var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
     return baseURL;
 }
 
 function getCasesButtonClicked() {
-    
+//======================================
+//    case data table
+//======================================
     var conditions = {
         signs_of_mental_illness: document.getElementById('mental_illness_dropdown').value,
         threat_level: document.getElementById('threat_level').value,
@@ -103,6 +99,9 @@ function getCasesButtonClicked() {
     if (resultsTableElement) {
         resultsTableElement.innerHTML = tableBody;
     }
+    var casesCountElement = document.getElementById('cases_count')
+    casesCountElement.innerHTML= `Cases: ${casesList.length}`;
+    
 })
 
 //======================================

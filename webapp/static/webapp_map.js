@@ -1,6 +1,7 @@
 /*
  * webapp_map.js
  * Yiwen Luo, 27 April 2016
+ * Used Datamap js from Jeff's samples 
  * 11 November 2020
  *
  */
@@ -21,14 +22,6 @@ function getAPIBaseURL() {
 
 //========================================================
 
-
-var extraStateInfo = {
-    MN: {population: 5640000, jeffhaslivedthere: true, fillColor: '#2222aa'},
-    CA: {population: 39500000, jeffhaslivedthere: true, fillColor: '#2222aa'},
-    NM: {population: 2100000, jeffhaslivedthere: false, fillColor: '#2222aa'},
-    OH: {population: 0, jeffhaslivedthere: false, fillColor: '#aa2222'}
-};
-
 function initializeMap() {
     var map = new Datamap({ element: document.getElementById('map-container'), 
                             scope: 'usa', 
@@ -44,6 +37,8 @@ function initializeMap() {
                           });
 }
 
+var usa_annual = [965, 904, 906, 888, 858, 374]
+
 function intializeSummaryTable(){
     var stateSummaryElement = document.getElementById('summary_table');
     
@@ -57,6 +52,16 @@ function intializeSummaryTable(){
         tableBody += '<th>2018</th>';
         tableBody += '<th>2019</th>';
         tableBody += '<th>2020</th></tr>';
+    
+        tableBody += '</tr><td>'+ 'US' + '</td>';
+        tableBody += '<td>'+'United States' + '</td>';
+        tableBody += '<td>'+ 4895 + '</td>';
+        tableBody += '<td>'+ usa_annual[0] + '</td>';
+        tableBody += '<td>'+usa_annual[1] + '</td>';
+        tableBody += '<td>'+usa_annual[2] + '</td>';
+        tableBody += '<td>'+usa_annual[3]+ '</td>';
+        tableBody += '<td>'+usa_annual[4] + '</td>';
+        tableBody += '<td>'+usa_annual[5] + '</td></tr>';
     
     if (stateSummaryElement) {
             stateSummaryElement.innerHTML = tableBody;
@@ -73,8 +78,14 @@ function hoverPopupTemplate(geography, data) {
     return template;
 }
 
+
+
+        
+
 function onStateClick(geography) {
-    
+//======================================
+//    case summary table
+//======================================
     var url = getAPIBaseURL() + `/cases/states/${geography.id}/annual`;
         
     fetch(url, {method: 'get'})
@@ -82,8 +93,8 @@ function onStateClick(geography) {
     .then(function(casesDict) {
         // Build the table body.
         var tableBody = '';
-        tableBody += '<tr><th>State Abbreviation</th>';
-        tableBody += '<th>State</th>';
+        tableBody += '<tr><th>Abbreviation</th>';
+        tableBody += '<th>Region</th>';
         tableBody += '<th>Total Cases</th>';
         tableBody += '<th>2015</th>';
         tableBody += '<th>2016</th>';
@@ -92,6 +103,17 @@ function onStateClick(geography) {
         tableBody += '<th>2019</th>';
         tableBody += '<th>2020</th></tr>';
 
+        tableBody += '</tr><td>'+ 'US' + '</td>';
+        tableBody += '<td>'+'United States' + '</td>';
+        tableBody += '<td>'+ 4895 + '</td>';
+        tableBody += '<td>'+ usa_annual[0] + '</td>';
+        tableBody += '<td>'+usa_annual[1] + '</td>';
+        tableBody += '<td>'+usa_annual[2] + '</td>';
+        tableBody += '<td>'+usa_annual[3]+ '</td>';
+        tableBody += '<td>'+usa_annual[4] + '</td>';
+        tableBody += '<td>'+usa_annual[5] + '</td></tr>';
+        
+        
         tableBody += '</tr><td>'+casesDict['state_abbreviation'] + '</td>';
         tableBody += '<td>'+casesDict['state'] + '</td>';
         tableBody += '<td>'+casesDict['total_cases'] + '</td>';
@@ -116,5 +138,8 @@ function onStateClick(geography) {
         console.log(error);
     });
     
+//======================================
+//    chart year
+//======================================
     
 }
