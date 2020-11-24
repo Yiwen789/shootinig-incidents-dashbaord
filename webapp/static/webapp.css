@@ -1,4 +1,14 @@
 /*
+
+ * webapp.css
+ * Yiwen Luo 
+ * Used map styles from Jeff's samples 
+ * 11 November 2020
+ *
+ 
+*/
+
+/*
 =======================================
 title
 =======================================
@@ -24,8 +34,11 @@ title
     margin: 0;
 }
 
-/* navigation bar index page
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* 
+=======================================
+navigation bar index page
+=======================================
+ */
 .horizontal-navbar-index-container {
     display: flex;
     flex-direction: row;
@@ -71,8 +84,11 @@ ul.horizontal-navbar-index li a:hover {
     color: white;
 }
 
-/* navigation bar
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* 
+=======================================
+navigation bar
+=======================================
+ */
 ul.horizontal-navbar {
     list-style-type: none;
     margin-top: 0px;
@@ -127,8 +143,11 @@ title
 	width: 100%;
 }
 
-/* dropdown list
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/*
+=======================================
+dropdown menu
+=======================================
+*/
 .dropdown{
     width:100%;
 }
@@ -138,8 +157,11 @@ title
     align-items: center;
 }
 
-/* graphs
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/*
+=======================================
+graphs
+=======================================
+*/
 .pie{
     width: 20%;
 }
@@ -199,22 +221,9 @@ map
 #map-container {
     position: relative;
     float: left;
-
-    /* Preserving the container div's aspect ratio (which should be 4:3 for
-     * the Datamap US map) uses this slightly bizarre CSS trick, where you make
-     * sure the height is 0 and the ratio between width and padding-bottom
-     * is your desired aspect ratio. See this pretty good article for details:
-     * https://css-tricks.com/aspect-ratio-boxes/
-     */
     height: 0;
     width: 100%;
     padding-bottom: 60%;
-
-    /* My friend Shaun (Carleton CS '02) is even worse than I am at the details of
-     * graphic design. So when he wants to make sure the designers don't preserve
-     * his color choices, he makes stuff orange to force their hand. I am using
-     * orange here both to remind you to change the color, and to make visible the
-     * size and aspect ratio of the US map object. */
     background: #dddddd;
 }
 
@@ -267,8 +276,11 @@ table
 }
 
 
-/* Typography
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* 
+=======================================
+typography
+=======================================
+ */
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0;
@@ -282,21 +294,12 @@ p {
 header{
     margin: -40px;
     padding: 0px;
-    overflow: auto;
 }
 
 body {
   background-color: rgb(242, 242, 242);
     margin: 20px;
     padding: 20px;
-/*
-  display: block;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  line-height: 1;
-*/
   font-weight: 400;
   font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: rgb(50, 50, 50);
@@ -348,10 +351,6 @@ button
     display: flex;
     flex: 1;
     justify-content: flex-end;
-/*
-    position:absolute;
-    right: 50px;
-*/
 }
 
 .button-container {
@@ -359,4 +358,22 @@ button
     flex-direction: row;
     flex: 1;
     justify-content: flex-end;
+}
+
+/*
+=======================================
+button
+=======================================
+*/
+
+.pieChartContent{
+    display:flex;
+    flex-direction: r;
+    width: 100%;
+}
+
+.pieChartContent > div{
+    margin: 0px;
+  padding: 10px;
+    width: 50%;
 }

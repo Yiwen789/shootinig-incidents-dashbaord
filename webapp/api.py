@@ -40,77 +40,77 @@ def send_query(query):
         exit()
     return cursor
 
-def dropdown_options(variable_name):
-    # return the all possible values for a specified variable
-    # Normally stored in table variable_name.type, except for booleans
-    list_to_show = []
-    column_name = 'type'
-    # print(variable_name)
-    if variable_name == 'boolean_match':
-        column_name = 'boolean'
-    query = 'SELECT ' + column_name + ' FROM '+ variable_name
-    values = send_query(query)
-    for option in values:
-        list_to_show.append(option[0]) # Note that 'option' is a list with length 1.
-    return json.dumps(list_to_show)
+#def dropdown_options(variable_name):
+#    # return the all possible values for a specified variable
+#    # Normally stored in table variable_name.type, except for booleans
+#    list_to_show = []
+#    column_name = 'type'
+#    # print(variable_name)
+#    if variable_name == 'boolean_match':
+#        column_name = 'boolean'
+#    query = 'SELECT ' + column_name + ' FROM '+ variable_name
+#    values = send_query(query)
+#    for option in values:
+#        list_to_show.append(option[0]) # Note that 'option' is a list with length 1.
+#    return json.dumps(list_to_show)
 
-def get_condition(variable_name):
-    # return the requested value of the variable
-    # Ex: For an endpoint ..../...?flee=foot&body_camera=true,
-    # when 'flee' is given as a parameter, this function will return 'foot'.
-    # When the value is 'none', return ''.
-    var_value = flask.request.args.get(variable_name)
-    if var_value == None:
-        return ''
-    else:
-    	return var_value
+#def get_condition(variable_name):
+#    # return the requested value of the variable
+#    # Ex: For an endpoint ..../...?flee=foot&body_camera=true,
+#    # when 'flee' is given as a parameter, this function will return 'foot'.
+#    # When the value is 'none', return ''.
+#    var_value = flask.request.args.get(variable_name)
+#    if var_value == None:
+#        return ''
+#    else:
+#    	return var_value
 
-def search_by_given_conditions():
-    # Variable names of searching conditions:
-    # ID, date, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
-    # While 'State' is not considered as a searching criteria in this method, it will be returned as a case detail together with the other info mentioned.
-    
-#    query = '''SELECT incidents.id, incidents.date, signs_of_mental_illness.type, threat_level.type, flee.type, body_camera.type, manner_of_death.type, arm_category.type, states.state
-#               FROM incidents, signs_of_mental_illness, body_camera, threat_level, flee, manner_of_death, arm_category, states, locations
-#               WHERE incidents.id = locations.id
-#                 AND locations.state = states.id
-#            '''
-
-    query = '''
-            SELECT states.state, states.state_full_name, incidents.date, victims.full_name, gender.type AS gender, race.type AS race, victims.age, signs_of_mental_illness.type AS mental_illness, threat_level.type AS threat_level, flee.type AS flee, body_camera.type AS body_camera, manner_of_death.type AS manner_of_death, arm_category.type AS arm_category
-            FROM incidents, locations, states, victims, gender, race, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
-            WHERE incidents.id = locations.id
-            AND incidents.id = victims.id
-            AND locations.state = states.id
-            AND victims.gender = gender.id
-            AND victims.race = race.id
-            AND incidents.signs_of_mental_illness = signs_of_mental_illness.id
-            AND incidents.threat_level = threat_level.id
-            AND incidents.flee = flee.id
-            AND incidents.body_camera = body_camera.id
-            AND incidents.manner_of_death = manner_of_death.id
-            AND incidents.arm_category = arm_category.id
-
-    '''
-    
-    conditions = ['signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category']
-    
-    conditions_dict = {}
-
-    for variable_name in conditions:
-        
-        conditions_dict[variable_name] = flask.request.args.get(variable_name)
-        
-    for variable_name, variable_value in conditions_dict.items():
-        if variable_value != None:
-            variable_value = str(variable_value)
-            query += f'\nAND {variable_name}.type = \'{variable_value}\''
-        else:
-            continue
-    
-    query += '\nORDER BY incidents.date LIMIT 20'
-    cases_total = send_query(query) # type: cursor
-    return cases_total
+#def search_by_given_conditions():
+#    # Variable names of searching conditions:
+#    # ID, date, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
+#    # While 'State' is not considered as a searching criteria in this method, it will be returned as a case detail together with the other info mentioned.
+#    
+##    query = '''SELECT incidents.id, incidents.date, signs_of_mental_illness.type, threat_level.type, flee.type, body_camera.type, manner_of_death.type, arm_category.type, states.state
+##               FROM incidents, signs_of_mental_illness, body_camera, threat_level, flee, manner_of_death, arm_category, states, locations
+##               WHERE incidents.id = locations.id
+##                 AND locations.state = states.id
+##            '''
+#
+#    query = '''
+#            SELECT states.state, states.state_full_name, incidents.date, victims.full_name, gender.type AS gender, race.type AS race, victims.age, signs_of_mental_illness.type AS mental_illness, threat_level.type AS threat_level, flee.type AS flee, body_camera.type AS body_camera, manner_of_death.type AS manner_of_death, arm_category.type AS arm_category
+#            FROM incidents, locations, states, victims, gender, race, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
+#            WHERE incidents.id = locations.id
+#            AND incidents.id = victims.id
+#            AND locations.state = states.id
+#            AND victims.gender = gender.id
+#            AND victims.race = race.id
+#            AND incidents.signs_of_mental_illness = signs_of_mental_illness.id
+#            AND incidents.threat_level = threat_level.id
+#            AND incidents.flee = flee.id
+#            AND incidents.body_camera = body_camera.id
+#            AND incidents.manner_of_death = manner_of_death.id
+#            AND incidents.arm_category = arm_category.id
+#
+#    '''
+#    
+#    conditions = ['signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category']
+#    
+#    conditions_dict = {}
+#
+#    for variable_name in conditions:
+#        
+#        conditions_dict[variable_name] = flask.request.args.get(variable_name)
+#        
+#    for variable_name, variable_value in conditions_dict.items():
+#        if variable_value != None:
+#            variable_value = str(variable_value)
+#            query += f'\nAND {variable_name}.type = \'{variable_value}\''
+#        else:
+#            continue
+#    
+#    query += '\nORDER BY incidents.date LIMIT 20'
+#    cases_total = send_query(query) # type: cursor
+#    return cases_total
 
 
 #=================================== Endpoint Implements=============================================
@@ -296,19 +296,65 @@ def cases_by_race_by_condition():
     cursor = send_query(query)
     
 #====================================================================
+    
+    list_of_dict = []
+    
+    for data in cursor:
+        dict = {}
+        dict['data'] = data[0]
+        dict['label'] = data[1]
+        list_of_dict.append(dict)
 
-    data = []
-    labels = []
+    return json.dumps(list_of_dict)
+
+
+
+@api.route('/cases/total/demographics/gender')
+def cases_by_gender_by_condition():
+    query = '''
+            SELECT COUNT(incidents), gender.type
+            FROM incidents, locations, states, victims, gender, race, signs_of_mental_illness, threat_level, flee, body_camera, manner_of_death, arm_category
+            WHERE incidents.id = locations.id
+            AND incidents.id = victims.id
+            AND locations.state = states.id
+            AND victims.gender = gender.id
+            AND victims.race = race.id
+            AND incidents.signs_of_mental_illness = signs_of_mental_illness.id
+            AND incidents.threat_level = threat_level.id
+            AND incidents.flee = flee.id
+            AND incidents.body_camera = body_camera.id
+            AND incidents.manner_of_death = manner_of_death.id
+            AND incidents.arm_category = arm_category.id
+    '''
     
-    for row in cursor:
-        data.append(row[0])
-        labels.append(row[1])
+    conditions = ['signs_of_mental_illness','threat_level','flee','body_camera','manner_of_death','arm_category']
     
-    dict = {}
-    dict['data'] = data
-    dict['labels'] = labels
+    conditions_dict = {}
+
+    for variable_name in conditions:
+        conditions_dict[variable_name] = flask.request.args.get(variable_name)
+        
+    for variable_name, variable_value in conditions_dict.items():
+        if variable_value != None:
+            variable_value = str(variable_value)
+            query += f'\nAND {variable_name}.type = \'{variable_value}\''
+        else:
+            continue
             
-    return json.dumps(dict)
+    query += '\nGROUP BY gender.type'
+    cursor = send_query(query)
+    
+#====================================================================
+    
+    list_of_dict = []
+    
+    for data in cursor:
+        dict = {}
+        dict['data'] = data[0]
+        dict['label'] = data[1]
+        list_of_dict.append(dict)
+
+    return json.dumps(list_of_dict)
     
     
 

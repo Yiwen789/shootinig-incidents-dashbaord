@@ -8,36 +8,25 @@
 window.onload = initialize;
 
 function initialize() {
-    
-//    initializeMap();
-    
     getCasesButtonClicked();
-    getPieChartData();
-//    initializeCharts();
     
     var element = document.getElementById('get_cases_button');
 
     element.onclick = getCasesButtonClicked;
     
-//    var element_2 = document.getElementById('get_cases_button');
-//
-//    element_2.onclick = getPieChartData;
 }
 
-function selectDropdown() {
-    var mental_illness_selected_value = document.getElementById('mental_illness_dropdown').value;
-    
-    mental_illness_selected_value.onclick = getCasesButtonClicked;
-}
 
-// Returns the base URL of the API, onto which endpoint components can be appended.
+//function selectDropdown() {
+//    var mental_illness_selected_value = document.getElementById('mental_illness_dropdown').value;
+//    mental_illness_selected_value.onclick = getCasesButtonClicked;
+//}
+
+
 function getAPIBaseURL() {
-    
     var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
     return baseURL;
 }
-
-//page_search.html
 
 function getCasesButtonClicked() {
     
@@ -62,7 +51,6 @@ function getCasesButtonClicked() {
     var url = getAPIBaseURL() + '/cases/total';
 
     if (all_default == true){
-        //
     } else{
         url += '?'
         for (condition in conditions){
@@ -75,18 +63,10 @@ function getCasesButtonClicked() {
         }
        url = url.slice(0, -1);
     }
-    
 
 
-    // Send the request to the api
     fetch(url, {method: 'get'})
-
-    // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
     .then((response) => response.json())
-
-    // Once you have your list of author dictionaries, use it to build
-    // an HTML table displaying the author names and lifespan.
     .then(function(casesList) {
         // Build the table body.
         var tableBody = '';
@@ -119,15 +99,14 @@ function getCasesButtonClicked() {
             tableBody += '<td>'+casesList[k]['arm_category'] + '</td></tr>';
         }
 
-        // Put the table body we just built inside the table that's already on the page.
-        var resultsTableElement = document.getElementById('results_table');
-        if (resultsTableElement) {
-            resultsTableElement.innerHTML = tableBody;
-        }
-    })
+    var resultsTableElement = document.getElementById('results_table');
+    if (resultsTableElement) {
+        resultsTableElement.innerHTML = tableBody;
+    }
+})
 
 //======================================
-//    chart
+//    chart race
 //======================================
         
     var url = getAPIBaseURL() + '/cases/total/demographics/race';
@@ -149,70 +128,32 @@ function getCasesButtonClicked() {
 
     var resultsTableElement = document.getElementById('racial-pie-chart');
 
-    // Send the request to the api
     fetch(url, {method: 'get'})
-
-    // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
     .then((response) => response.json())
-    
-    .then(data =>{
-        var data = data['data'];
-        var labels = data['labels'];
+    .then(function(casesList){
         
-//        console.log(data)
-        console.log[labels];
+        var data = []
+        var labels = []
+        for(var k = 0; k < casesList.length; k++){
+            data.push(casesList[k]['data']);
+            labels.push(casesList[k]['label']);
+        }
+
+        renderPieChartRace(data, labels);
         
-        renderPieChart(data, labels);
     })
-    
-    
-    
     
     // Log the error if anything went wrong during the fetch.
     .catch(function(error) {
         console.log(error);
     });
-}
+    
 
-function renderPieChart(data, labels){
-    var ctx = document.getElementById("racial-pie-chart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-            }],
-        },
-        options: {
-            tooltips: {enabled: false},
-            hover: {mode: null},
-          }
-    });
-}
-   
-
-function getPieChartData(){
-    var conditions = {
-        signs_of_mental_illness: document.getElementById('mental_illness_dropdown').value,
-        threat_level: document.getElementById('threat_level').value,
-        flee: document.getElementById('flee').value,
-        body_camera: document.getElementById('body_camera').value,
-        manner_of_death: document.getElementById('manner_of_death').value,
-        arm_category: document.getElementById('arm_category').value
-    }
-    
-    var all_default = true;
-    
-    for (condition in conditions){
-        if (conditions[condition] != 'None'){
-            all_default = false;
-            break;
-        } 
-    }
-    
-    url = getAPIBaseURL() + '/cases/total/demographics/race';
+//======================================
+//    chart gender
+//======================================
+            
+var url = getAPIBaseURL() + '/cases/total/demographics/gender';
 
     if (all_default == true){
         //
@@ -229,46 +170,62 @@ function getPieChartData(){
        url = url.slice(0, -1);
     }
 
-    var resultsTableElement = document.getElementById('racial-pie-chart');
+    var resultsTableElement = document.getElementById('gender-pie-chart');
 
-    // Send the request to the api
     fetch(url, {method: 'get'})
-
-    // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
     .then((response) => response.json())
-    
-    .then(data =>{
+    .then(function(casesList){
         var data = []
         var labels = []
         for(var k = 0; k < casesList.length; k++){
-            var data = data[k]['data'];
-            var labels = data[k]['labels'];
+            data.push(casesList[k]['data']);
+            labels.push(casesList[k]['label']);
         }
-        
-        
-//        console.log(data)
-        console.log(labels);
-        
-        renderPieChart(data, labels);
+        renderPieChartGender(data, labels);
     })
-    
-//    .then(function(response){
-//        var responseJson = response.json();
-//        
-//        console.log(responseJson)
-//        renderPieChart([0, 1, 2, 3, 4], ['a', 'b', 'c', 'd', 'e']);
-//        
-//    })
-
-        
-    
-  
-    
+    // Log the error if anything went wrong during the fetch.
+    .catch(function(error) {
+        console.log(error);
+    });
 }
 
-
+function renderPieChartRace(data, labels){
+    var ctx = document.getElementById("racial-pie-chart").getContext("2d");
+    var myPieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#4D525A', '#3E7DCC', '#8F9CB3', '#00C8C8', '#F9D84A', '#8CC0FF']
+            }],
+        },
+        options: {
+            tooltips: {enabled: false},
+            hover: {mode: null},
+            tooltips: false,
+          }
+    });
+}
+    
+function renderPieChartGender(data, labels){
+    var ctxGender = document.getElementById("gender-pie-chart").getContext("2d");
+    var myPieChart = new Chart(ctxGender, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#4D525A', '#3E7DCC', '#8F9CB3', '#00C8C8', '#F9D84A', '#8CC0FF']
+            }],
+        },
+        options: {
+            tooltips: {enabled: false},
+            hover: {mode: null},
+            tooltips: false,
+          }
+    });
+    
+}
    
-function initializeCharts(){
-    
-}
+

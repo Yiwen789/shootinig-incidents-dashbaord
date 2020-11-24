@@ -5,25 +5,25 @@
     <title>Case Searching Page</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='webapp.css') }}" />
     <script type="text/javascript" src="{{url_for('static', filename='webapp.js') }}" ></script>
-<!--    <script type="text/javascript" src="{{url_for('static', filename='webapp_charts.js') }}" ></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='chart_library.js') }}" ></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>-->
 
 </head>
     
-<!--<body>-->
-<!-- partial:index.partial.html -->
+
     
 <body>  
 
         <header>
+            <!-- ========================================   -->
+            <!--title-->
+            <!-- ========================================   -->
             <div class = 'banner'>
                 <h1 class = 'title'>US Police Shootings</h1>
             </div>
-
-
-            <!--  -->
-            <!-- navigation bar*/ -->
-
+            <!-- ========================================   -->
+            <!--navigation bar-->
+            <!-- ========================================   -->
             <div>
                 <ul class = 'horizontal-navbar'>
                     <li><a href = '/'>Home</a></li>
@@ -31,20 +31,14 @@
                     <li><a href = 'page_map.html'>Map</a></li>
                 </ul>
             </div>
-
         </header>
         
-        
-    
-<!--        <h3 class = 'text-container'>Introduction</h3>-->
-   
+        <!-- ========================================   -->
+        <!--dropdown menus-->
+        <!-- ========================================   -->
         <div>
             <h3 class="subtitle">Selections</h3>
         </div>
-        
-        <!--  -->
-        <!-- dropdown menus -->
-        
         <div class = 'dropdown-container'>
             <div>
                 <label>Signs of Mental Illness: </label>
@@ -81,10 +75,7 @@
                     </select>
                 </div>
             </div>  
-        </div>
-        
-        <!-- ==================================== -->
-        
+        </div>        
         
         <div class = 'dropdown-container'>
             <div>
@@ -105,7 +96,7 @@
                     <select id = 'manner_of_death' class = 'select'>
                           <option value='None'>Select</option>
                           <option value="Shot">Shot</option>
-                          <option value="Shot and Tasered">No</option>
+                          <option value="Shot and Tasered">Shot and Tasered</option>
                     </select> 
                 </div>
             </div>
@@ -131,36 +122,39 @@
                 </div>
             </div>
         </div>
-        
-        
-        
         <div class = 'button-container'>
             <div>
                 <button id="get_cases_button" class = 'button'>Get Cases</button>
             </div>
-<!--            <span class="my-spacer"></span>-->      
         </div>
-        
     
+        <!-- ========================================   -->
+        <!--pie charts-->
+        <!-- ========================================   -->
+        <div>
+            <h3 class = "subtitle">Demographic Makeup of Cases</h3>
+            <div class="pieChartContent">
+                <div>
+                    <canvas id="racial-pie-chart"></canvas>
+                </div>
+                <div>
+                    <canvas id="gender-pie-chart"></canvas>
+                </div> 
+            </div>         
+       </div>
+        
+        <!-- ========================================   -->
+        <!--data table-->
+        <!-- ========================================   -->
         <div>
             <h3 class="subtitle">Cases</h3>
-        </div>
-        
-        <div id = 'table-wrapper'>
-            <div id = 'table-scroll'>
-                <table id="results_table"></table>
+            <div id = 'table-wrapper'>
+                <div id = 'table-scroll'>
+                    <table id="results_table"></table>
+                </div>
             </div>
-        </div>
-        
-        
-        <div>
-            <h3 class = "subtitle">Graph: Racial Makeup of Cases</h3>
             
-            <div class="container">
-                <canvas id="racial-pie-chart"></canvas>
-            </div>
         </div>
-
 
 </body>
  
