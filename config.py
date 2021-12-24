@@ -15,6 +15,6 @@
 '''
 
 # Change these values as appropriate for your postgresql setup.
-database = 'grading'
-user = 'luoy'
-password = 'password'
+database = 'cs257'
+user = 'ywluo'
+password = ''
